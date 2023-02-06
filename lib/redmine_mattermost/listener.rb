@@ -50,7 +50,19 @@ class MattermostListener < Redmine::Hook::Listener
 		msg = "[#{escape issue.project}] #{escape journal.user.to_s} updated <#{object_url issue}|#{escape issue}>"
 
 		attachment = {}
-		attachment[:fields] = journal.details.map { |d| detail_to_field d }
+		attachment[:fields] = [{
+			:title => I18n.t("field_status"),
+			:value => escape(issue.status.to_s),
+			:short => true
+		}, {
+			:title => I18n.t("field_priority"),
+			:value => escape(issue.priority.to_s),
+			:short => true
+		}, {
+			:title => I18n.t("field_assigned_to"),
+			:value => escape(issue.assigned_to.to_s),
+			:short => true
+		}]
 
 		speak msg, channels, attachment, url
 	end
