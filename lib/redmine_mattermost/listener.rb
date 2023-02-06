@@ -10,10 +10,9 @@ class MattermostListener < Redmine::Hook::Listener
 		return unless channels.any? and url
 		return if issue.is_private?
 
-		msg = "[#{escape issue.project}] #{escape issue.author} created <#{object_url issue}|#{escape issue}>#{mentions issue.description}"
+		msg = "[#{escape issue.project}] #{escape issue.author} created <#{object_url issue}|#{escape issue}>"
 
 		attachment = {}
-		attachment[:text] = escape issue.description if issue.description
 		attachment[:fields] = [{
 			:title => I18n.t("field_status"),
 			:value => escape(issue.status.to_s),
@@ -48,10 +47,9 @@ class MattermostListener < Redmine::Hook::Listener
 		return if issue.is_private?
 		return if journal.private_notes?
 
-		msg = "[#{escape issue.project}] #{escape journal.user.to_s} updated <#{object_url issue}|#{escape issue}>#{mentions journal.notes}"
+		msg = "[#{escape issue.project}] #{escape journal.user.to_s} updated <#{object_url issue}|#{escape issue}>"
 
 		attachment = {}
-		attachment[:text] = escape journal.notes if journal.notes
 		attachment[:fields] = journal.details.map { |d| detail_to_field d }
 
 		speak msg, channels, attachment, url
@@ -138,7 +136,7 @@ class MattermostListener < Redmine::Hook::Listener
 		}
 
 		params[:username] = username if username
-		
+
 
 		params[:attachments] = [attachment] if attachment
 
